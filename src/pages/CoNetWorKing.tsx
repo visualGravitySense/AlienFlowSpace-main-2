@@ -5,6 +5,7 @@ import { assetUrl } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import DAODashboard from '@/components/DAODashboard';
 type ServiceProps = {
   title: string;
@@ -657,11 +658,11 @@ const CoNetWorKing: React.FC = () => {
                       </Button>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <a href="/alien-trip" className="flex-1">
+                      <Link to="/alien-trip" className="flex-1">
                         <Button className="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/50 font-[Exo]">
                           View on Alientrip
                         </Button>
-                      </a>
+                      </Link>
                       <a href="https://alienflowspace.gitbook.io/DAO" target="_blank" rel="noopener noreferrer" className="flex-1">
                         <Button className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/50 font-[Exo]">
                           Read Docs on Gitbook
@@ -896,16 +897,16 @@ const CoNetWorKing: React.FC = () => {
               Start your journey into decentralized finance and connect with a global network of innovators and investors.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/alien-trip">
+              <Link to="/alien-trip">
                 <Button className="bg-alien-gold hover:bg-alien-gold/90 text-alien-space-dark font-[Exo] px-8 py-3 text-lg">
                   Get Started
                 </Button>
-              </a>
-              <a href="/about">
+              </Link>
+              <Link to="/about">
                 <Button variant="outline" className="border-alien-green text-alien-green hover:bg-alien-green/10 font-[Exo] px-8 py-3 text-lg">
                   Learn More
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
