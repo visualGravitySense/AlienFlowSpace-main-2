@@ -864,7 +864,7 @@ const CoNetWorKing: React.FC = () => {
                           transition={{ duration: 0.3 }}
                         >
                           <Avatar className="mx-auto mb-4 w-20 h-20 border-2 border-alien-gold">
-                            <AvatarImage src={member.avatar} alt={member.name} />
+                            <AvatarImage src={assetUrl(member.avatar)} alt={member.name} />
                             <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
                         </motion.div>
