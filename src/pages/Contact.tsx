@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -445,8 +446,8 @@ const Contact: React.FC = () => {
                   <Map className="w-3.5 h-3.5" /> View Roadmap
                 </span>
               </a>
-              <a
-                href="/privacy-policy"
+              <Link
+                to="/privacy-policy"
                 className="relative p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-xl hover:border-purple-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
@@ -455,7 +456,7 @@ const Contact: React.FC = () => {
                   <span className="text-purple-400 font-nasalization font-semibold">Legal</span>
                 </div>
                 <p className="text-gray-400 text-xs font-exo">Política de privacidad</p>
-              </a>
+              </Link>
               <div className="relative p-4 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-xl hover:border-green-500/60 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 group overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
                 <div className="flex items-center gap-2 mb-1 relative">
