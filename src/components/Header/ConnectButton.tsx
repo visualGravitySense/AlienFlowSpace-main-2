@@ -5,10 +5,7 @@ import { Brain, Copy, CheckCircle } from 'lucide-react';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
 import { regenerateAIKey } from '@/utils/aiKeyGenerator';
 import { toast } from 'sonner';
-
-const WALLET_ICON = "/lovable-uploads/AW.png";
-const PORTAL_ICON_AVIF = "/lovable-uploads/AP1.avif";
-const PORTAL_ICON_JPG = "/lovable-uploads/AP.jpg";
+import { assetUrl } from '@/lib/utils';
 const ICON_SIZE = "h-7 w-7 sm:h-8 sm:w-8";
 
 const shortAddress = (addr: string) =>
@@ -109,7 +106,7 @@ const ConnectButton = () => {
           type="button"
         >
           <img
-            src={WALLET_ICON}
+            src={assetUrl("/lovable-uploads/AW.png")}
             alt="Wallet Logo"
             className={`${ICON_SIZE} rounded-full object-cover`}
             draggable={false}
@@ -135,9 +132,9 @@ const ConnectButton = () => {
           type="button"
         >
           <picture>
-            <source srcSet={PORTAL_ICON_AVIF} type="image/avif" />
+            <source srcSet={assetUrl("/lovable-uploads/AP1.avif")} type="image/avif" />
             <img
-              src={PORTAL_ICON_JPG}
+              src={assetUrl("/lovable-uploads/AP.jpg")}
               alt="Portal Icon"
               className={`${ICON_SIZE} rounded-full object-cover`}
               draggable={false}

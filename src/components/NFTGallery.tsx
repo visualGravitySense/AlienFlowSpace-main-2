@@ -67,7 +67,7 @@ const NFTGallery: React.FC = () => {
                   <div className="flex items-start gap-4">
                     <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-alien-gold/30 flex-shrink-0">
                       <img 
-                        src={collection.image} 
+                        src={assetUrl(collection.image)} 
                         alt={collection.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
