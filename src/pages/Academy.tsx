@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, Coins, Leaf, Brain, GraduationCap, 
-  Zap, ExternalLink, ChevronDown, Award, CheckCircle2 
+  Zap, ExternalLink, ChevronDown, Award, CheckCircle2, Search, X 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { assetUrl } from '@/lib/utils';
@@ -97,6 +97,37 @@ const partnerCategories = [
 
 const Academy = () => {
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategories, setActiveCategories] = useState<Set<string>>(new Set());
+
+  const toggleCategory = (label: string) => {
+    setActiveCategories(prev => {
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      return next;
+    });
+  };
+
+  const filteredCategories = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    const hasCategoryFilter = activeCategories.size > 0;
+    
+    return partnerCategories
+      .filter(cat => {
+        const matchesCategory = !hasCategoryFilter || activeCategories.has(cat.label);
+        if (!matchesCategory) return false;
+        if (!query) return true;
+        return cat.partners.some(p => p.name.toLowerCase().includes(query));
+      })
+      .map(cat => ({
+        ...cat,
+        partners: query 
+          ? cat.partners.filter(p => p.name.toLowerCase().includes(query))
+          : cat.partners
+      }))
+      .filter(cat => cat.partners.length > 0);
+  }, [searchQuery, activeCategories]);
 
   return (
     <div className="min-h-screen bg-transparent text-white font-exo pb-32">
@@ -196,24 +227,102 @@ const Academy = () => {
         </div>
       </section>
 
-      {/* 4. PARTNERS (FUNCIONALIDAD TOTAL) */}
+      {/* 4. PARTNERS — FBM: Motivation, Ability, Prompts */}
       <footer className="max-w-7xl mx-auto px-8">
+        {/* FBM Motivation: value proposition + social proof (count) */}
+        <div className="mb-6">
+          <h3 className="text-xl font-nasalization text-alien-gold mb-1">
+            Trusted Learning Partners
+          </h3>
+          <p className="text-gray-400 text-sm font-exo">
+            Curated platforms to accelerate your journey. Explore and start learning today.
+          </p>
+        </div>
+
+        {/* Filters + FBM Ability: clear feedback, adequate touch targets (min 44px) */}
+        <div className="mb-10 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-alien-gold/60" />
+              <input
+                type="text"
+                placeholder="Search partner..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-10 py-3 min-h-[44px] bg-black/60 border border-alien-gold/30 rounded-xl text-white placeholder:text-gray-500 focus:border-alien-green focus:outline-none focus:ring-1 focus:ring-alien-green/50 text-sm"
+                aria-label="Search partners"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 min-w-[44px] min-h-[44px] -m-1 flex items-center justify-center text-gray-400 hover:text-alien-gold rounded-lg hover:bg-white/5"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {/* FBM Prompt: contextual feedback when filtering */}
+            <div className="text-sm font-exo text-gray-400">
+              {filteredCategories.reduce((acc, c) => acc + c.partners.length, 0)} partners
+              {(searchQuery || activeCategories.size > 0) && (
+                <button
+                  onClick={() => { setSearchQuery(''); setActiveCategories(new Set()); }}
+                  className="ml-2 text-alien-green hover:text-alien-gold underline underline-offset-2"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveCategories(new Set())}
+              className={`min-h-[44px] px-4 py-2.5 rounded-lg text-[10px] font-nasalization uppercase tracking-wider transition-all ${
+                activeCategories.size === 0
+                  ? 'bg-alien-green/20 border border-alien-green/50 text-alien-green'
+                  : 'bg-white/5 border border-white/10 text-gray-500 hover:border-alien-gold/30 hover:text-alien-gold'
+              }`}
+            >
+              All
+            </button>
+            {partnerCategories.map((cat) => {
+              const isActive = activeCategories.has(cat.label);
+              return (
+                <button
+                  key={cat.label}
+                  onClick={() => toggleCategory(cat.label)}
+                  className={`min-h-[44px] px-4 py-2.5 rounded-lg text-[10px] font-nasalization uppercase tracking-wider transition-all ${
+                    isActive
+                      ? 'bg-alien-gold/20 border border-alien-gold/50 text-alien-gold'
+                      : 'bg-white/5 border border-white/10 text-gray-500 hover:border-alien-gold/30 hover:text-alien-gold'
+                  }`}
+                >
+                  {cat.label.replace(/\s+PARTNERS?$/i, '')}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Partner cards — FBM Ability: larger touch targets, clearer affordance, tooltip */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12">
-          {partnerCategories.map((cat, i) => (
+          {filteredCategories.map((cat, i) => (
             <div key={i} className="space-y-6">
               <h5 className="text-[11px] font-nasalization text-alien-gold tracking-[0.3em] border-b border-white/10 pb-4 uppercase opacity-70">
                 {cat.label}
               </h5>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3">
                 {cat.partners.sort((a,b) => a.name.localeCompare(b.name)).map((p, j) => (
                   <a 
                     key={j} 
                     href={p.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="flex items-center gap-3 group"
+                    title={`Visit ${p.name} — ${cat.label}`}
+                    className="flex items-center gap-3 group min-h-[44px] py-2 px-3 -mx-3 rounded-lg hover:bg-alien-gold/5 transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-xl bg-white/5 p-1.5 border border-white/5 group-hover:border-[#39FF14]/40 group-hover:bg-[#39FF14]/10 transition-all duration-300 flex items-center justify-center overflow-hidden">
+                    <div className="w-10 h-10 shrink-0 rounded-xl bg-white/5 p-2 border border-white/5 group-hover:border-[#39FF14]/40 group-hover:bg-[#39FF14]/10 transition-all duration-300 flex items-center justify-center overflow-hidden">
                       <img 
                         src={assetUrl(p.logo.startsWith('http') || p.logo.startsWith('/') ? p.logo : `/lovable-uploads/Academy/${p.logo}`)} 
                         alt={p.name} 
@@ -221,16 +330,31 @@ const Academy = () => {
                         onError={(e) => { e.currentTarget.style.opacity = '0.2'; }} 
                       />
                     </div>
-                    <span className="text-[12px] text-gray-500 group-hover:text-white transition-colors tracking-tight font-medium">
+                    <span className="text-[12px] text-gray-500 group-hover:text-white transition-colors tracking-tight font-medium flex-1">
                       {p.name}
                     </span>
-                    <ExternalLink className="w-2.5 h-2.5 text-white/0 group-hover:text-[#39FF14] transition-all" />
+                    <span className="opacity-0 group-hover:opacity-100 text-alien-gold transition-opacity">
+                      <ExternalLink className="w-4 h-4" aria-hidden />
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
           ))}
         </div>
+
+        {/* FBM Prompt: spark + facilitator when empty */}
+        {filteredCategories.length === 0 && (
+          <div className="text-center py-12 px-4 rounded-2xl bg-white/5 border border-alien-gold/20">
+            <p className="text-gray-500 font-exo mb-4">No partners match your search.</p>
+            <button
+              onClick={() => { setSearchQuery(''); setActiveCategories(new Set()); }}
+              className="px-6 py-3 bg-alien-gold/20 hover:bg-alien-gold/30 border border-alien-gold/50 text-alien-gold rounded-xl font-nasalization text-sm uppercase tracking-wider transition-all"
+            >
+              Show all partners
+            </button>
+          </div>
+        )}
       </footer>
     </div>
   );
