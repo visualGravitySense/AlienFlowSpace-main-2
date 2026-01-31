@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { assetUrl } from '@/lib/utils';
 
 interface EcoProduct {
   name: string;
@@ -78,7 +79,7 @@ const EcoProductCarousel = () => {
           <div className="flex items-center space-x-4">
             <div className="w-20 h-20 rounded-lg overflow-hidden border border-alien-gold/30">
               <img
-                src={products[currentIndex].image}
+                src={assetUrl(products[currentIndex].image)}
                 alt={products[currentIndex].name}
                 className="w-full h-full object-cover"
               />

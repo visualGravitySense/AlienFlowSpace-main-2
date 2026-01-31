@@ -6,6 +6,7 @@ import CookieConsent from './CookieConsent';
 import ScrollToTop from './ScrollToTop';
 import AIChatbot from './AIChatbot';
 import { initGoogleTranslate } from '@/lib/translator';
+import { assetUrl } from '@/lib/utils';
 
 const Layout: React.FC = () => {
   const location = useLocation();
@@ -22,16 +23,16 @@ const Layout: React.FC = () => {
 
   // Map of route backgrounds
   const bgMap: Record<string, string> = {
-    '/': "/lovable-uploads/EMWBack.png",
-    '/about': "/lovable-uploads/AboutBG.png",
-    '/alien-trip': "/lovable-uploads/BGRCM.png",
-    '/contact': "/lovable-uploads/BGVL.png",
-    '/academy': "/lovable-uploads/AcademyBG.png",
-    '/clubs': "/lovable-uploads/ClubsBG.png",
-    '/conetworking': "/lovable-uploads/CoNetWorKingBG.png",
+    '/': assetUrl("/lovable-uploads/EMWBack.png"),
+    '/about': assetUrl("/lovable-uploads/AboutBG.png"),
+    '/alien-trip': assetUrl("/lovable-uploads/BGRCM.png"),
+    '/contact': assetUrl("/lovable-uploads/BGVL.png"),
+    '/academy': assetUrl("/lovable-uploads/AcademyBG.png"),
+    '/clubs': assetUrl("/lovable-uploads/ClubsBG.png"),
+    '/conetworking': assetUrl("/lovable-uploads/CoNetWorKingBG.png"),
   };
 
-  const bgImage = bgMap[location.pathname] || "/lovable-uploads/EMWBack.png";
+  const bgImage = bgMap[location.pathname] || assetUrl("/lovable-uploads/EMWBack.png");
 
   return (
     <div className="flex flex-col min-h-screen relative">

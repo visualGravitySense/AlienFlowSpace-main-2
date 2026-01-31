@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Network, TrendingUp, Shield, Coins, Sprout, Pickaxe, Layers, Dna, FlaskConical, Gamepad2, Database, Zap, Leaf, Building, Users, Landmark, Globe, Palette, Heart, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { assetUrl } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { motion } from 'framer-motion';
@@ -101,7 +102,7 @@ const PartnerSection: React.FC<PartnerSectionProps> = ({ title, partners, color,
                   transition={{ duration: 0.3 }}
                 >
                   <a href={partner.url} target="_blank" rel="noopener noreferrer">
-                    <img src={partner.logo} alt={partner.name} className="w-full h-full object-contain p-1" />
+                    <img src={assetUrl(partner.logo)} alt={partner.name} className="w-full h-full object-contain p-1" />
                   </a>
                 </motion.div>
                 <CardTitle className={`${colors.text} font-[Atomic Age] text-lg`}>
@@ -457,7 +458,7 @@ const CoNetWorKing: React.FC = () => {
           {/* Hero Section - No box, just content */}
           <div className="text-center mb-20">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-alien-gold/20 rounded-full mb-6 border-2 border-alien-gold/40 backdrop-blur-md">
-              <img src="/lovable-uploads/CoNetWorKingLogo.png" alt="CoNetWorKing Official Logo" className="h-16 w-16 object-contain" />
+              <img src={assetUrl("/lovable-uploads/CoNetWorKingLogo.png")} alt="CoNetWorKing Official Logo" className="h-16 w-16 object-contain" />
             </div>
             <h1 className="md:text-7xl font-bold text-alien-green mb-8 font-[Atomic Age, Star Wars] drop-shadow-[0_0_30px_rgba(3,255,25,0.6)] text-4xl">
               CoNetWorKing
@@ -818,7 +819,7 @@ const CoNetWorKing: React.FC = () => {
                           transition={{ duration: 0.3 }}
                         >
                           <a href={partner.url} target="_blank" rel="noopener noreferrer">
-                            <img src={partner.avatar} alt={partner.name} className="w-full h-full object-contain p-1" />
+                            <img src={assetUrl(partner.avatar)} alt={partner.name} className="w-full h-full object-contain p-1" />
                           </a>
                         </motion.div>
                         <CardTitle className="text-alien-gold font-[Atomic Age] text-base">

@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Button } from "@/components/ui/button";
+import { assetUrl } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { GraduationCap, Users, Trophy, Shield, Zap, Globe, Leaf } from "lucide-react";
@@ -27,7 +28,7 @@ const About: React.FC = () => {
               whileHover={{ scale: 1.1, rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
-              <img src="/lovable-uploads/ALogo.png" alt="About Official Logo" className="h-12 w-12 object-contain" />
+              <img src={assetUrl("/lovable-uploads/ALogo.png")} alt="About Official Logo" className="h-12 w-12 object-contain" />
             </motion.div>
             <AnimatedText
               className="text-4xl md:text-5xl font-bold mb-6 font-nasalization text-glow leading-tight text-alien-green"
@@ -226,19 +227,19 @@ const About: React.FC = () => {
             <div className="flex flex-wrap justify-center gap-8 my-12">
               <Link to="/academy">
                 <Button className="bg-gradient-to-br from-alien-gold to-alien-gold-light hover:from-alien-gold-light hover:to-alien-gold text-alien-space-dark p-8 rounded-2xl text-center w-56 h-32 flex flex-col items-center justify-center shadow-2xl hover:shadow-alien-gold/30 transition-all duration-300 hover:transform hover:scale-110">
-                  <img src="/lovable-uploads/AcademyLogo.png" alt="Academy Logo" className="h-12 w-12 mb-2 object-contain" />
+                  <img src={assetUrl("/lovable-uploads/AcademyLogo.png")} alt="Academy Logo" className="h-12 w-12 mb-2 object-contain" />
                   <span className="font-semibold text-lg font-nasalization">Academy</span>
                 </Button>
               </Link>
               <Link to="/clubs">
                 <Button className="bg-gradient-to-br from-alien-green to-alien-green-light hover:from-alien-green-light hover:to-alien-green text-alien-space-dark p-8 rounded-2xl text-center w-56 h-32 flex flex-col items-center justify-center shadow-2xl hover:shadow-alien-green/30 transition-all duration-300 hover:transform hover:scale-110">
-                  <img src="/lovable-uploads/ClubLogo.png" alt="Clubs Logo" className="h-12 w-12 mb-2 object-contain" />
+                  <img src={assetUrl("/lovable-uploads/ClubLogo.png")} alt="Clubs Logo" className="h-12 w-12 mb-2 object-contain" />
                   <span className="font-semibold text-lg font-nasalization">Clubs</span>
                 </Button>
               </Link>
               <Link to="/conetworking">
                 <Button className="bg-gradient-to-br from-alien-gold to-alien-gold-light hover:from-alien-gold-light hover:to-alien-gold text-alien-space-dark p-8 rounded-2xl text-center w-56 h-32 flex flex-col items-center justify-center shadow-2xl hover:shadow-alien-gold/30 transition-all duration-300 hover:transform hover:scale-110">
-                  <img src="/lovable-uploads/CoNetWorKingLogo.png" alt="CoNetWorKing Logo" className="h-12 w-12 mb-2 object-contain" />
+                  <img src={assetUrl("/lovable-uploads/CoNetWorKingLogo.png")} alt="CoNetWorKing Logo" className="h-12 w-12 mb-2 object-contain" />
                   <span className="font-semibold text-lg font-nasalization">CoNetWorKing</span>
                 </Button>
               </Link>
