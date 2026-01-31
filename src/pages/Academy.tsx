@@ -5,6 +5,7 @@ import {
   Zap, ExternalLink, ChevronDown, Award, CheckCircle2 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { assetUrl } from '@/lib/utils';
 
 // --- DATA DEFINITIVA: 3 MÓDULOS CON 4 BLOQUES CADA UNO ---
 const academyModules = [
@@ -104,7 +105,7 @@ const Academy = () => {
       <header className="pt-16 pb-20 text-center px-4">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-24 h-24 mx-auto mb-8 relative">
           <div className="absolute inset-0 bg-alien-gold/10 blur-3xl rounded-full" />
-          <img src="/lovable-uploads/AcademyLogo.png" alt="Logo" className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]" />
+          <img src={assetUrl("/lovable-uploads/AcademyLogo.png")} alt="Logo" className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]" />
         </motion.div>
         
         <h1 className="text-6xl md:text-8xl font-nasalization mb-8 tracking-widest text-[#39FF14] drop-shadow-[0_0_15px_rgba(212,175,55,0.7)] uppercase">
@@ -214,7 +215,7 @@ const Academy = () => {
                   >
                     <div className="w-8 h-8 rounded-xl bg-white/5 p-1.5 border border-white/5 group-hover:border-[#39FF14]/40 group-hover:bg-[#39FF14]/10 transition-all duration-300 flex items-center justify-center overflow-hidden">
                       <img 
-                        src={p.logo.startsWith('http') || p.logo.startsWith('/') ? p.logo : `/lovable-uploads/Academy/${p.logo}`} 
+                        src={assetUrl(p.logo.startsWith('http') || p.logo.startsWith('/') ? p.logo : `/lovable-uploads/Academy/${p.logo}`)} 
                         alt={p.name} 
                         className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500 scale-90 group-hover:scale-100"
                         onError={(e) => { e.currentTarget.style.opacity = '0.2'; }} 

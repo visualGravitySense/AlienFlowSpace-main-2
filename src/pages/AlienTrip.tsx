@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Rocket, Star, Clock, ScrollText, BookOpen, PieChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { assetUrl } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import LoadingScreen from '@/components/LoadingScreen';
 
@@ -272,7 +273,7 @@ const AlienTrip: React.FC = () => {
               <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-alien-gold/30"></div>
               
               <div className="absolute left-1/2 transform -translate-x-1/2 top-0 -mt-8">
-                <img src="/lovable-uploads/VC.png" alt="Alien UFO" className="w-16 h-16 object-contain animate-bounce" />
+                <img src={assetUrl("/lovable-uploads/VC.png")} alt="Alien UFO" className="w-16 h-16 object-contain animate-bounce" />
               </div>
               
               {roadmapEvents.map((event, index) => <div key={index} className="relative grid grid-cols-1 md:grid-cols-5 gap-8 mb-16">

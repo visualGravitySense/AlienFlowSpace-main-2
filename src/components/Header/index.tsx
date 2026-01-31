@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { assetUrl } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
 import Logo from "@/components/Header/Logo";
 import DesktopNav from "@/components/Header/DesktopNav";
@@ -19,7 +19,7 @@ const Header = () => {
     return (
       <div className="bg-alien-space-dark h-14 w-full flex items-center justify-center font-nasalization">
         <div className="flex items-center gap-3">
-          <img src="/lovable-uploads/ALogo.png" alt="AlienFlowSpace" className="h-8 w-8 animate-pulse" />
+          <img src={assetUrl("/lovable-uploads/ALogo.png")} alt="AlienFlowSpace" className="h-8 w-8 animate-pulse" />
           <div className="flex gap-1">
             <span className="w-1.5 h-1.5 bg-alien-gold rounded-full animate-bounce" style={{animationDelay:'0s'}}></span>
             <span className="w-1.5 h-1.5 bg-alien-gold rounded-full animate-bounce" style={{animationDelay:'0.15s'}}></span>

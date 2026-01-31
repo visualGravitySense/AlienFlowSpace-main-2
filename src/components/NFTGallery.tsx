@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Image as ImageIcon } from 'lucide-react';
+import { assetUrl } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -122,7 +123,7 @@ const NFTGallery: React.FC = () => {
                 <div className="bg-alien-space-dark/60 rounded-xl border border-alien-gold/20 overflow-hidden hover:border-alien-green/40 transition-all">
                   <div className="aspect-square bg-gradient-to-br from-alien-space-light to-alien-space-dark flex items-center justify-center relative overflow-hidden">
                     <img 
-                      src={item.image} 
+                      src={assetUrl(item.image)} 
                       alt={item.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />

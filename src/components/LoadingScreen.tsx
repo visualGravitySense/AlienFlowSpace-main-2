@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
 
 const LoadingScreen = () => {
   return (
@@ -62,7 +63,7 @@ const LoadingScreen = () => {
             className="relative"
           >
             <img 
-              src="/lovable-uploads/ALogo.png" 
+              src={assetUrl("/lovable-uploads/ALogo.png")} 
               alt="AlienFlow Logo" 
               className="w-40 h-40 object-contain relative z-20" 
             />

@@ -22,7 +22,7 @@ function App() {
         name: 'Alien World',
         description: 'Alien World dApp',
         url: window.location.origin,
-        icons: [`${window.location.origin}/lovable-uploads/ALogo.png`]
+        icons: [`${window.location.origin}${import.meta.env.BASE_URL || '/'}lovable-uploads/ALogo.png`]
       }}
     >
       <Router>
