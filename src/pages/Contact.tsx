@@ -134,15 +134,31 @@ const Contact: React.FC = () => {
   const [terminalHistory, setTerminalHistory] = useState<Array<{ type: 'user' | 'system' | 'ai'; text: string }>>([
     { type: 'system', text: '> AlienFlowSpace Communication Terminal v2.0' },
     { type: 'system', text: '> Establishing secure connection...' },
-    { type: 'ai', text: '¡Hola, viajero cósmico! Soy AI Tor. ¿En qué puedo ayudarte hoy?' },
   ]);
+  const [displayedAiMessage, setDisplayedAiMessage] = useState('');
+  const aiWelcomeText = '¡Hola, viajero cósmico! Soy AI Tor. ¿En qué puedo ayudarte hoy?';
   const [isTyping, setIsTyping] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (terminalRef.current) terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-  }, [terminalHistory]);
+  }, [terminalHistory, displayedAiMessage]);
+
+  useEffect(() => {
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i <= aiWelcomeText.length) {
+        setDisplayedAiMessage(aiWelcomeText.slice(0, i));
+        i++;
+      } else {
+        clearInterval(timer);
+        setTerminalHistory(prev => [...prev, { type: 'ai', text: aiWelcomeText }]);
+        setDisplayedAiMessage('');
+      }
+    }, 35);
+    return () => clearInterval(timer);
+  }, []);
 
   const validateField = (name: keyof ContactFormData, value: string) => {
     const fieldSchema = contactFormSchema.shape[name];
@@ -242,21 +258,23 @@ const Contact: React.FC = () => {
     <div className="relative flex flex-col flex-1 min-h-screen">
       <main className="relative z-10 flex-grow container mx-auto px-4 pt-4 pb-16">
         <div className="max-w-6xl mx-auto">
+          {/* 1. Hero — compact, clear hierarchy */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative mb-12 py-8"
+            className="mb-10 pb-8 border-b border-alien-gold/20"
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-nasalization text-center font-extrabold relative">
-              <span className="bg-gradient-to-r from-alien-green via-alien-gold to-alien-green bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(57,255,20,0.5)]">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-nasalization text-center font-extrabold">
+              <span className="bg-gradient-to-r from-alien-green via-alien-gold to-alien-green bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(57,255,20,0.4)]">
                 Contact
               </span>
             </h1>
-            <p className="text-center text-gray-300 font-exo mt-4 max-w-2xl mx-auto text-lg">
-              Iniciar contacto con el Centro de Mando. Tiempo de respuesta: Menos de 4 horas luz. Initiate contact with the Command Center. Response time: Under 4 light-hours.
+            <p className="text-center text-gray-400 font-exo mt-3 max-w-2xl mx-auto text-base">
+              Iniciar contacto con el Centro de Mando. Response time: Under 4 light-hours.
             </p>
           </motion.div>
 
+          {/* 2. Form section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -265,7 +283,7 @@ const Contact: React.FC = () => {
           >
             <div
               ref={formRef}
-              className="bg-gradient-to-br from-alien-space-dark/95 to-black border-2 border-alien-gold/40 rounded-2xl p-6 md:p-8 shadow-[0_0_40px_rgba(240,216,130,0.1)] relative overflow-hidden transition-transform duration-300 ease-out"
+              className="bg-gradient-to-br from-alien-space-dark/98 to-black border-2 border-alien-gold/50 rounded-2xl p-6 md:p-8 shadow-[0_0_40px_rgba(240,216,130,0.15)] relative overflow-hidden transition-transform duration-300 ease-out"
             >
               <AnimatePresence>
                 {showSuccessOverlay && (
@@ -322,7 +340,7 @@ const Contact: React.FC = () => {
                       onFocus={() => setFocusedField(id)}
                       onBlur={() => setFocusedField(null)}
                       placeholder={placeholder}
-                      className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-300 ${
+                      className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-400 placeholder:opacity-80 ${
                         focusedField === id ? 'border-alien-green shadow-[0_0_15px_rgba(57,255,20,0.4)]' :
                         formErrors[id as keyof ContactFormData] ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.3)]' :
                         'border-alien-gold/30'
@@ -346,7 +364,7 @@ const Contact: React.FC = () => {
                     onFocus={() => setFocusedField('subject')}
                     onBlur={() => setFocusedField(null)}
                     placeholder="¿Sobre qué quieres hablar?"
-                    className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-300 ${
+                    className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-400 placeholder:opacity-80 ${
                       focusedField === 'subject' ? 'border-alien-green shadow-[0_0_15px_rgba(57,255,20,0.4)]' :
                       formErrors.subject ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.3)]' : 'border-alien-gold/30'
                     }`}
@@ -369,7 +387,7 @@ const Contact: React.FC = () => {
                     onBlur={() => setFocusedField(null)}
                     placeholder="Escribe tu mensaje aquí..."
                     rows={5}
-                    className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-300 resize-none ${
+                    className={`bg-alien-space-dark/60 border-2 transition-all text-white placeholder:text-gray-400 placeholder:opacity-80 resize-none ${
                       focusedField === 'message' ? 'border-alien-green shadow-[0_0_15px_rgba(57,255,20,0.4)]' :
                       formErrors.message ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.3)]' : 'border-alien-gold/30'
                     }`}
@@ -396,7 +414,7 @@ const Contact: React.FC = () => {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="relative w-full md:w-auto bg-gradient-to-r from-alien-green to-alien-gold hover:from-white hover:to-alien-green text-alien-space-dark font-nasalization font-bold py-3 px-8 overflow-hidden group transition-all duration-300"
+                      className="relative w-full md:w-auto bg-gradient-to-r from-alien-green to-alien-gold hover:from-white hover:to-alien-green hover:shadow-[0_0_25px_rgba(57,255,20,0.5)] text-alien-space-dark font-nasalization font-bold py-3 px-8 overflow-hidden group transition-all duration-300"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         {isSubmitting ? (
@@ -406,7 +424,7 @@ const Contact: React.FC = () => {
                           </>
                         ) : (
                           <>
-                            <Radio className="w-4 h-4" />
+                            <Radio className="w-4 h-4 group-hover:animate-pulse" />
                             Initiate Transmission
                           </>
                         )}
@@ -422,56 +440,58 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* 3. Quick access + Join the Transmission — 2-col on lg */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 pb-12 border-b border-alien-gold/20">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="grid grid-cols-2 gap-3"
+              className="grid grid-cols-2 gap-4"
             >
               <a
                 href="https://alienflowspace.gitbook.io/DAO"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative p-4 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-xl hover:border-blue-500/60 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 group overflow-hidden"
+                className="flex flex-col h-full min-h-[140px] p-5 bg-gradient-to-br from-blue-500/15 to-blue-600/5 border border-blue-500/40 rounded-xl hover:border-blue-500/70 hover:shadow-[0_0_20px_rgba(59,130,246,0.25)] hover:-translate-y-0.5 transition-all duration-300 group"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
-                <div className="flex items-center gap-2 mb-1 relative">
-                  <BookOpen className="w-5 h-5 text-blue-400 shrink-0" />
-                  <span className="text-blue-400 font-nasalization font-semibold">Documentación</span>
-                  <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-exo uppercase tracking-wider bg-blue-500/30 text-blue-200 border border-blue-400/40">New</span>
+                <div className="flex items-center gap-2 mb-2">
+                  <BookOpen className="w-6 h-6 text-blue-400 shrink-0" />
+                  <span className="text-blue-400 font-nasalization font-semibold text-sm">Documentación</span>
+                  <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-exo uppercase bg-blue-500/30 text-blue-200">New</span>
                 </div>
-                <p className="text-gray-400 text-xs font-exo mb-3">Guías técnicas y roadmap</p>
-                <span className="inline-flex items-center gap-1.5 text-blue-300 text-xs font-exo group-hover:text-blue-200 transition-colors">
-                  <Map className="w-3.5 h-3.5" /> View Roadmap
+                <p className="text-gray-400 text-sm font-exo mb-auto flex-1">Guías técnicas y roadmap</p>
+                <span className="inline-flex items-center gap-1.5 text-blue-300 text-sm font-exo mt-2 group-hover:text-blue-200 transition-colors">
+                  <Map className="w-4 h-4" /> View Roadmap →
                 </span>
               </a>
               <Link
                 to="/privacy-policy"
-                className="relative p-4 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-xl hover:border-purple-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300 group overflow-hidden"
+                className="flex flex-col h-full min-h-[140px] p-5 bg-gradient-to-br from-purple-500/15 to-purple-600/5 border border-purple-500/40 rounded-xl hover:border-purple-500/70 hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:-translate-y-0.5 transition-all duration-300 group"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
-                <div className="flex items-center gap-2 mb-1 relative">
-                  <Scale className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span className="text-purple-400 font-nasalization font-semibold">Legal</span>
+                <div className="flex items-center gap-2 mb-2">
+                  <Scale className="w-6 h-6 text-purple-400 shrink-0" />
+                  <span className="text-purple-400 font-nasalization font-semibold text-sm">Legal</span>
                 </div>
-                <p className="text-gray-400 text-xs font-exo">Política de privacidad</p>
+                <p className="text-gray-400 text-sm font-exo mb-auto flex-1">Política de privacidad</p>
+                <span className="text-purple-300 text-sm font-exo mt-2 group-hover:text-purple-200 transition-colors">
+                  View Policy →
+                </span>
               </Link>
-              <div className="relative p-4 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-xl hover:border-green-500/60 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 group overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
-                <div className="flex items-center gap-2 mb-1 relative">
-                  <Shield className="w-5 h-5 text-green-400 shrink-0" />
-                  <span className="text-green-400 font-nasalization font-semibold">Soporte Técnico</span>
+              <div className="flex flex-col h-full min-h-[140px] p-5 bg-gradient-to-br from-green-500/15 to-green-600/5 border border-green-500/40 rounded-xl hover:border-green-500/70 hover:shadow-[0_0_20px_rgba(34,197,94,0.25)] hover:-translate-y-0.5 transition-all duration-300 group">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="w-6 h-6 text-green-400 shrink-0" />
+                  <span className="text-green-400 font-nasalization font-semibold text-sm">Soporte Técnico</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <a href={`mailto:${SUPPORT_EMAIL}`} className="text-gray-400 hover:text-green-400 text-xs font-exo truncate flex-1 min-w-0 transition-colors">{SUPPORT_EMAIL}</a>
+                <p className="text-gray-400 text-sm font-exo mb-auto flex-1">Contacto directo por email</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className="text-green-300 text-sm font-exo truncate flex-1 hover:text-green-200 transition-colors">{SUPPORT_EMAIL}</a>
                   <button
                     type="button"
                     onClick={copyEmail}
-                    className="shrink-0 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 text-green-400 hover:text-green-300 transition-all"
+                    className="shrink-0 min-h-[40px] min-w-[40px] inline-flex items-center justify-center rounded-lg bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 text-green-400 transition-all"
                     title="Copiar email"
                   >
-                    {emailCopied ? <span className="text-[10px] font-exo">✓</span> : <Copy className="w-4 h-4" />}
+                    {emailCopied ? <span className="text-xs font-exo">✓</span> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -479,94 +499,99 @@ const Contact: React.FC = () => {
                 href="https://t.me/AlienFlow"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative p-4 bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 border border-cyan-500/40 rounded-xl hover:border-cyan-500/60 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300 group overflow-hidden"
+                className="flex flex-col h-full min-h-[140px] p-5 bg-gradient-to-br from-cyan-500/15 to-cyan-600/5 border border-cyan-500/40 rounded-xl hover:border-cyan-500/70 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:-translate-y-0.5 transition-all duration-300 group"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden />
-                <div className="flex items-center gap-2 mb-1 relative">
-                  <Users className="w-5 h-5 text-cyan-400 shrink-0" />
-                  <span className="text-cyan-400 font-nasalization font-semibold">Comunidad</span>
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-6 h-6 text-cyan-400 shrink-0" />
+                  <span className="text-cyan-400 font-nasalization font-semibold text-sm">Comunidad</span>
                 </div>
-                <p className="text-gray-400 text-xs font-exo">Únete a la tripulación • Telegram @AlienFlow</p>
+                <p className="text-gray-400 text-sm font-exo mb-auto flex-1">Únete a la tripulación en Telegram</p>
+                <span className="text-cyan-300 text-sm font-exo mt-2 group-hover:text-cyan-200 transition-colors">
+                  @AlienFlow →
+                </span>
               </a>
             </motion.div>
 
+            {/* 4. Join the Transmission — active + coming soon sections */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-alien-space-dark/80 border border-alien-gold/30 rounded-xl p-6 hover:border-alien-gold/50 hover:shadow-[0_0_30px_rgba(240,216,130,0.15)] transition-all duration-300"
+              className="bg-alien-space-dark/80 border border-alien-gold/30 rounded-xl p-6 hover:border-alien-gold/50 transition-all duration-300"
             >
               <h3 className="text-alien-gold font-nasalization text-lg mb-4 flex items-center gap-2">
                 <MessageSquare className="w-5 h-5" />
                 Join the Transmission
               </h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  {socialPrimary.map((s, idx) => (
-                    <motion.a
-                      key={s.name}
-                      href={s.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 + idx * 0.05 }}
-                      className="flex items-center gap-3 min-h-[44px] p-3 bg-alien-space-light/20 rounded-lg border border-alien-gold/20 hover:border-alien-green/50 hover:bg-alien-space-light/30 hover:shadow-[0_0_15px_rgba(57,255,20,0.2)] transition-all duration-300 group"
-                    >
-                      <SocialIcon name={s.icon} className="w-5 h-5 text-alien-gold group-hover:text-alien-green transition-colors shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <p className="text-gray-300 font-exo text-sm truncate group-hover:text-alien-green transition-colors">{s.name}</p>
-                          {s.live && <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-alien-green animate-pulse" title="Live" />}
-                          {s.isNew && <span className="shrink-0 px-1 py-0.5 rounded text-[9px] font-exo uppercase bg-alien-green/20 text-alien-green border border-alien-green/40">New</span>}
-                        </div>
-                        {s.microcopy && <p className="text-gray-500 text-xs font-exo truncate">{s.microcopy}</p>}
+              {/* Active channels */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {socialPrimary.map((s, idx) => (
+                  <motion.a
+                    key={s.name}
+                    href={s.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 + idx * 0.05 }}
+                    className="flex items-center gap-3 min-h-[48px] p-3 bg-alien-space-light/20 rounded-lg border border-alien-gold/20 hover:border-alien-green/50 hover:bg-alien-space-light/30 transition-all duration-300 group"
+                  >
+                    <SocialIcon name={s.icon} className="w-6 h-6 text-alien-gold group-hover:text-alien-green transition-colors shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-gray-300 font-exo text-sm truncate group-hover:text-alien-green transition-colors">{s.name}</p>
+                        {s.live && <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-alien-green animate-pulse" title="Live" />}
+                        {s.isNew && <span className="shrink-0 px-1 py-0.5 rounded text-[9px] font-exo uppercase bg-alien-green/20 text-alien-green border border-alien-green/40">New</span>}
                       </div>
-                    </motion.a>
-                  ))}
-                </div>
+                      {s.microcopy && <p className="text-gray-500 text-xs font-exo truncate">{s.microcopy}</p>}
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+              {/* Coming Soon — transparent, dashed border */}
+              <div className="pt-4 border-t border-alien-gold/20">
+                <p className="text-[10px] font-exo uppercase tracking-wider text-gray-500 mb-2">Coming Soon</p>
                 <div className="grid grid-cols-2 gap-2">
                   {socialComingSoon.map((s) => (
                     <motion.button
                       key={s.name}
                       type="button"
                       onClick={() => notifyMeComingSoon(s.name)}
-                      className="flex items-center gap-3 min-h-[44px] p-3 bg-alien-space-light/10 rounded-lg border border-orange-500/20 hover:border-orange-500/40 hover:shadow-[0_0_12px_rgba(249,115,22,0.2)] text-left group transition-all duration-300"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-3 min-h-[48px] p-3 bg-transparent rounded-lg border-2 border-dashed border-orange-500/30 hover:border-orange-500/50 hover:bg-orange-500/5 text-left group transition-all duration-300"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                     >
-                      <span className="relative">
-                        <SocialIcon name={s.icon} className="w-5 h-5 text-gray-500 shrink-0" />
-                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-500 animate-pulse" aria-hidden />
-                      </span>
-                      <div className="flex-1 min-w-0">
+                      <SocialIcon name={s.icon} className="w-6 h-6 text-gray-500 shrink-0" />
+                      <div className="flex-1 min-w-0 text-left">
                         <p className="text-gray-500 font-exo text-sm truncate">{s.name}</p>
-                        <span className="text-[10px] text-orange-400 font-exo">Coming Soon · Notify me</span>
+                        <span className="text-[10px] text-orange-400 font-exo">Notify me</span>
                       </div>
                     </motion.button>
                   ))}
                 </div>
-                <div className="pt-2 border-t border-alien-gold/20">
-                  <p className="text-[10px] font-exo uppercase tracking-wider text-gray-500 mb-2">More channels</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {socialSecondary.map((s) => (
-                      <a
-                        key={s.name}
-                        href={s.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex flex-col items-center justify-center gap-1 min-h-[44px] min-w-[44px] p-2 rounded-lg bg-alien-space-light/10 border border-alien-gold/10 hover:border-alien-gold/30 hover:bg-alien-space-light/20 transition-all group"
-                      >
-                        <SocialIcon name={s.icon} className="w-5 h-5 text-gray-400 group-hover:text-alien-gold transition-colors" />
-                        <span className="text-[9px] font-exo text-gray-500 truncate max-w-full">{s.name}</span>
-                      </a>
-                    ))}
-                  </div>
+              </div>
+              {/* More channels */}
+              <div className="pt-4 border-t border-alien-gold/20 mt-4">
+                <p className="text-[10px] font-exo uppercase tracking-wider text-gray-500 mb-2">More channels</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {socialSecondary.map((s) => (
+                    <a
+                      key={s.name}
+                      href={s.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center gap-1 min-h-[48px] p-2 rounded-lg bg-alien-space-light/10 border border-alien-gold/10 hover:border-alien-gold/30 transition-all group"
+                    >
+                      <SocialIcon name={s.icon} className="w-6 h-6 text-gray-400 group-hover:text-alien-gold transition-colors" />
+                      <span className="text-[9px] font-exo text-gray-500 truncate max-w-full">{s.name}</span>
+                    </a>
+                  ))}
                 </div>
               </div>
             </motion.div>
           </div>
 
+          {/* 5. AI Terminal */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -579,9 +604,10 @@ const Contact: React.FC = () => {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
-              <div className="flex items-center gap-2 flex-1">
+              <div className="flex items-center gap-2 flex-1" title="AI Support — ask anything">
                 <Terminal className="w-4 h-4 text-alien-green" />
-                <span className="text-alien-green font-mono text-sm">Space Terminal - Asistente AI</span>
+                <span className="text-alien-green font-mono text-sm">Space Terminal — Asistente AI</span>
+                <span className="text-gray-500 font-exo text-xs hidden sm:inline">· Ask anything</span>
               </div>
               <div className="w-8 h-8 rounded-full overflow-hidden border border-alien-gold/50">
                 <img src={aiTorAvatar} alt="AI Tor" className="w-full h-full object-cover" />
@@ -609,6 +635,12 @@ const Contact: React.FC = () => {
                     {entry.text}
                   </motion.div>
                 ))}
+                {displayedAiMessage !== '' && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-alien-green">
+                    <span className="text-purple-400">[AI Tor] </span>
+                    {displayedAiMessage}<span className="inline-block w-2 h-4 ml-0.5 bg-alien-green animate-pulse align-middle" />
+                  </motion.div>
+                )}
               </AnimatePresence>
               {isTyping && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-alien-green flex items-center gap-2">
@@ -622,23 +654,23 @@ const Contact: React.FC = () => {
               )}
             </div>
 
-            <form onSubmit={handleTerminalSubmit} className="border-t border-alien-green/30 p-4">
-              <div className="flex items-center gap-2">
-                <ChevronRight className="w-5 h-5 text-alien-green" />
+            <form onSubmit={handleTerminalSubmit} className="border-t border-alien-green/40 p-4 bg-alien-space-dark/30">
+              <div className="flex items-center gap-2 rounded-lg border-2 border-alien-green/50 bg-black/40 px-3 py-2 focus-within:border-alien-green focus-within:shadow-[0_0_15px_rgba(57,255,20,0.3)] transition-all">
+                <ChevronRight className="w-5 h-5 text-alien-green shrink-0" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={terminalInput}
                   onChange={(e) => setTerminalInput(e.target.value)}
-                  placeholder="Escribe tu mensaje..."
-                  className="flex-1 bg-transparent border-none outline-none text-alien-gold font-mono placeholder:text-gray-600"
+                  placeholder="Type your message... / Escribe tu mensaje..."
+                  className="flex-1 bg-transparent border-none outline-none text-alien-gold font-mono placeholder:text-gray-400 placeholder:opacity-80 text-sm min-h-[40px]"
                   disabled={isTyping}
                 />
                 <Button
                   type="submit"
                   size="sm"
                   disabled={isTyping || !terminalInput.trim()}
-                  className="bg-alien-green/20 hover:bg-alien-green/30 text-alien-green border border-alien-green/50"
+                  className="bg-alien-green/30 hover:bg-alien-green/50 text-alien-green border border-alien-green/60 shrink-0"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
